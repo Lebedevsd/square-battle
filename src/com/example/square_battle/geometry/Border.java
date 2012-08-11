@@ -7,6 +7,10 @@ public class Border extends Visible {
 		setBorderType(0);
 	}
 	
+	public Border(int borderType){
+		setBorderType(borderType);
+	}
+	
 	public int getBorderType() {
 		return borderType;
 	}
