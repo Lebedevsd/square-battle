@@ -5,5 +5,6 @@ public enum MapErrors {
 	notInTheMap,
 	notSetted,
 	alreadySetted,
+	notInUse,
 	none;
 }

@@ -2,7 +2,7 @@ package com.example.square_battle.geometry;
 
 import android.annotation.SuppressLint;
 
-@SuppressLint({ "ParserError", "ParserError", "ParserError" }) public class Map {
+@SuppressLint({ "ParserError", "ParserError", "ParserError", "ParserError" }) public class Map {
 	private int mapType;
 	private Cell[][] cells;
 	public Map(){
@@ -63,23 +63,13 @@ import android.annotation.SuppressLint;
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.bot){
-				if (cells[0][0].getBotBorder().getBorderType() != 0 && 
-					cells[1][0].getTopBorder().getBorderType() != 0){
-					cells[0][0].setBotBorder(new Border(borderType));
-					cells[1][0].setTopBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetBot(orientation, 0, 0, borderType);
 			}
 			if (orientation == Orientation.left){
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.right){
-				if (cells[0][0].getRightBorder().getBorderType() != 0 &&
-					cells[1][0].getLeftBorder().getBorderType() != 0){
-					cells[0][0].setRightBorder(new Border(borderType));
-					cells[0][1].setLeftBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetRight(orientation, 0, 0, borderType);
 			}
 		}
 		if (diagonalOrientation == DiagonalOrientation.topright){
@@ -87,20 +77,10 @@ import android.annotation.SuppressLint;
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.bot){
-				if (cells[0][mapType-1].getBotBorder().getBorderType() != 0 && 
-					cells[1][mapType-1].getTopBorder().getBorderType() != 0){
-					cells[0][mapType-1].setBotBorder(new Border(borderType));
-					cells[1][mapType-1].setTopBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetBot(orientation, mapType-1, 0, borderType);
 			}
 			if (orientation == Orientation.left){
-				if (cells[0][mapType-1].getLeftBorder().getBorderType() != 0 && 
-					cells[0][mapType-2].getRightBorder().getBorderType() != 0){
-					cells[0][mapType-1].setLeftBorder(new Border(borderType));
-					cells[0][mapType-2].setRightBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetLeft(orientation, mapType-1, 0, borderType);
 			}
 			if (orientation == Orientation.right){
 				return MapErrors.wrongPosition;
@@ -108,23 +88,13 @@ import android.annotation.SuppressLint;
 		}
 		if (diagonalOrientation == DiagonalOrientation.botright){
 			if (orientation == Orientation.top ){
-				if (cells[mapType-2][mapType-1].getBotBorder().getBorderType() != 0 && 
-					cells[mapType-1][mapType-1].getTopBorder().getBorderType() != 0){
-					cells[mapType-2][mapType-1].setBotBorder(new Border(borderType));
-					cells[mapType-1][mapType-1].setTopBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetTop(orientation, mapType-1, mapType-1, borderType);
 			}
 			if (orientation == Orientation.bot){
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.left){
-				if (cells[mapType-1][mapType-1].getLeftBorder().getBorderType() != 0 && 
-					cells[mapType-1][mapType-2].getRightBorder().getBorderType() != 0){
-					cells[mapType-1][mapType-1].setLeftBorder(new Border(borderType));
-					cells[mapType-1][mapType-2].setRightBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetLeft(orientation, mapType-1, mapType-1, borderType);
 			}
 			if (orientation == Orientation.right){
 				return MapErrors.wrongPosition;
@@ -132,12 +102,7 @@ import android.annotation.SuppressLint;
 		}
 		if (diagonalOrientation == DiagonalOrientation.botleft){
 			if (orientation == Orientation.top ){
-				if (cells[mapType-2][0].getBotBorder().getBorderType() != 0 && 
-					cells[mapType-1][0].getTopBorder().getBorderType() != 0){
-					cells[mapType-2][0].setBotBorder(new Border(borderType));
-					cells[mapType-1][0].setTopBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetTop(orientation, 0, mapType-1, borderType);
 			}
 			if (orientation == Orientation.bot){
 				return MapErrors.wrongPosition;
@@ -146,12 +111,7 @@ import android.annotation.SuppressLint;
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.right){
-				if (cells[mapType-1][0].getLeftBorder().getBorderType() != 0 && 
-					cells[mapType-1][1].getRightBorder().getBorderType() != 0){
-					cells[mapType-1][0].setLeftBorder(new Border(borderType));
-					cells[mapType-1][1].setRightBorder(new Border(borderType));
-					return MapErrors.none;
-				}else return MapErrors.alreadySetted;
+				return checkAndSetRight(orientation, 0, mapType-1, borderType);
 			}
 		}
 		return MapErrors.notInTheMap;
@@ -159,28 +119,13 @@ import android.annotation.SuppressLint;
 	private MapErrors setEdgeBorder(Orientation orientation ,Orientation cellOrientation, int coll, int row, int borderType){
 		if (cellOrientation == Orientation.bot){
 			if (orientation == Orientation.top){
-				if (cells[row][coll].getTopBorder().getBorderType() != 0 && 
-				    cells[row - 1][coll].getBotBorder().getBorderType() != 0){
-					cells[row][coll].setTopBorder(new Border(borderType));
-					cells[row - 1][coll].setBotBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetTop(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.right){
-				if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
-				    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
-					cells[row][coll].setRightBorder(new Border(borderType));
-					cells[row][coll + 1].setLeftBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetRight(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.left){
-				if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
-				    cells[row][coll - 1].getRightBorder().getBorderType() != 0){
-					cells[row][coll].setLeftBorder(new Border(borderType));
-					cells[row][coll - 1].setRightBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetLeft(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.bot){
 				return MapErrors.wrongPosition;
@@ -191,123 +136,98 @@ import android.annotation.SuppressLint;
 				return MapErrors.wrongPosition;
 			}
 			if (orientation == Orientation.right){
-				if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
-				    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
-					cells[row][coll].setRightBorder(new Border(borderType));
-					cells[row][coll + 1].setLeftBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetRight(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.left){
-				if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
-				    cells[row][coll - 1].getRightBorder().getBorderType() != 0){
-					cells[row][coll].setLeftBorder(new Border(borderType));
-					cells[row][coll - 1].setRightBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetLeft(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.bot){
-				if (cells[row][coll].getBotBorder().getBorderType() != 0 && 
-					cells[row + 1][coll].getTopBorder().getBorderType() != 0){
-					cells[row][coll].setBotBorder(new Border(borderType));
-					cells[row + 1][coll].setTopBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetBot(orientation, coll, row, borderType);	
 			}
 		}
 		if (cellOrientation == Orientation.left){
 			if (orientation == Orientation.top){
-				if (cells[row][coll].getTopBorder().getBorderType() != 0 && 
-						cells[row - 1][coll].getBotBorder().getBorderType() != 0){
-					cells[row][coll].setTopBorder(new Border(borderType));
-					cells[row - 1][coll].setBotBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;
+				return checkAndSetTop(orientation, coll, row, borderType);
 			}
 			if (orientation == Orientation.right){
-				if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
-				    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
-					cells[row][coll].setRightBorder(new Border(borderType));
-					cells[row][coll + 1].setLeftBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetRight(orientation, coll, row, borderType);	
 			}
 			if (orientation == Orientation.left){
 				return MapErrors.wrongPosition;	
 			}
 			if (orientation == Orientation.bot){
-				if (cells[row][coll].getBotBorder().getBorderType() != 0 && 
-					cells[row + 1][coll].getTopBorder().getBorderType() != 0){
-					cells[row][coll].setBotBorder(new Border(borderType));
-					cells[row + 1][coll].setTopBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetBot(orientation, coll, row, borderType);	
 			}
 		}
 		if (cellOrientation == Orientation.right){
 			if (orientation == Orientation.top){
-				if (cells[row][coll].getTopBorder().getBorderType() != 0 && 
-						cells[row - 1][coll].getBotBorder().getBorderType() != 0){
-					cells[row][coll].setTopBorder(new Border(borderType));
-					cells[row - 1][coll].setBotBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;
+				return checkAndSetTop(orientation, coll, row, borderType);
 			}
 			if (orientation == Orientation.right){
 				return MapErrors.wrongPosition;	
 			}
 			if (orientation == Orientation.left){
-				if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
-				    cells[row][coll - 1].getRightBorder().getBorderType() != 0){
-					cells[row][coll].setLeftBorder(new Border(borderType));
-					cells[row][coll - 1].setRightBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;		
+				return checkAndSetLeft(orientation, coll, row, borderType);		
 			}
 			if (orientation == Orientation.bot){
-				if (cells[row][coll].getBotBorder().getBorderType() != 0 && 
-					cells[row + 1][coll].getTopBorder().getBorderType() != 0){
-					cells[row][coll].setBotBorder(new Border(borderType));
-					cells[row + 1][coll].setTopBorder(new Border(borderType));
-					return MapErrors.none;	
-				}else return MapErrors.alreadySetted;	
+				return checkAndSetBot(orientation, coll, row, borderType);	
 			}
 		}
 		return MapErrors.notInTheMap;
 	}
 	private MapErrors setMiddleBorder(Orientation orientation, int coll, int row, int borderType){
 		if (orientation == Orientation.top){
+			return checkAndSetTop(orientation, coll, row, borderType);	
+		}
+		if (orientation == Orientation.right){
+			return checkAndSetRight(orientation, coll, row, borderType);	
+		}
+		if (orientation == Orientation.left){
+			return checkAndSetLeft(orientation, coll, row, borderType);	
+		}
+		if (orientation == Orientation.bot){
+			return checkAndSetBot(orientation, coll, row, borderType);	
+		}
+		return MapErrors.notInTheMap;
+	}
+	private MapErrors checkAndSetTop(Orientation orientation, int coll, int row, int borderType){
+		if (cells[row][coll].getCellType() == 0){
 			if (cells[row][coll].getTopBorder().getBorderType() != 0 && 
-			    cells[row - 1][coll].getBotBorder().getBorderType() != 0){
+				cells[row - 1][coll].getBotBorder().getBorderType() != 0){
 				cells[row][coll].setTopBorder(new Border(borderType));
 				cells[row - 1][coll].setBotBorder(new Border(borderType));
 				return MapErrors.none;	
-			}else return MapErrors.alreadySetted;	
-		}
-		if (orientation == Orientation.right){
-			if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
-			    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
-				cells[row][coll].setRightBorder(new Border(borderType));
-				cells[row][coll + 1].setLeftBorder(new Border(borderType));
-				return MapErrors.none;	
-			}else return MapErrors.alreadySetted;	
-		}
-		if (orientation == Orientation.left){
-			if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
-			    cells[row][coll - 1].getRightBorder().getBorderType() != 0){
-				cells[row][coll].setLeftBorder(new Border(borderType));
-				cells[row][coll - 1].setRightBorder(new Border(borderType));
-				return MapErrors.none;	
-			}else return MapErrors.alreadySetted;	
-		}
-		if (orientation == Orientation.bot){
+			}else return MapErrors.alreadySetted;
+		}else return MapErrors.notInUse;
+	}
+	private MapErrors checkAndSetBot(Orientation orientation, int coll, int row, int borderType){
+		if (cells[row][coll].getCellType() == 0){
 			if (cells[row][coll].getBotBorder().getBorderType() != 0 && 
 				cells[row + 1][coll].getTopBorder().getBorderType() != 0){
 				cells[row][coll].setBotBorder(new Border(borderType));
 				cells[row + 1][coll].setTopBorder(new Border(borderType));
 				return MapErrors.none;	
 			}else return MapErrors.alreadySetted;	
-		}
-		return MapErrors.notInTheMap;
+		}else return MapErrors.notInUse;
+	}
+	private MapErrors checkAndSetLeft(Orientation orientation, int coll, int row, int borderType){
+		if (cells[row][coll].getCellType() == 0){	
+			if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
+				cells[row][coll - 1].getRightBorder().getBorderType() != 0){
+				cells[row][coll].setLeftBorder(new Border(borderType));
+				cells[row][coll - 1].setRightBorder(new Border(borderType));
+				return MapErrors.none;	
+			}else return MapErrors.alreadySetted;
+		}else return MapErrors.notInUse;
+	}
+	private MapErrors checkAndSetRight(Orientation orientation, int coll, int row, int borderType){
+		if (cells[row][coll].getCellType() == 0){	
+			if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
+			    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
+				cells[row][coll].setRightBorder(new Border(borderType));
+				cells[row][coll + 1].setLeftBorder(new Border(borderType));
+				return MapErrors.none;	
+			}else return MapErrors.alreadySetted;
+		}else return MapErrors.notInUse;
 	}
 }
