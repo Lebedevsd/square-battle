@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //gameMap = BitmapFactory.decodeResource(getResources(), R.drawable.)
+        gameMap = BitmapFactory.decodeResource(getResources(), R.drawable.game_map);
     }
 
     @Override

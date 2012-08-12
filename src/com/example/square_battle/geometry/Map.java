@@ -3,11 +3,17 @@ package com.example.square_battle.geometry;
 import android.annotation.SuppressLint;
 
 @SuppressLint({ "ParserError", "ParserError", "ParserError", "ParserError" }) public class Map {
-	private int mapType;
-	private Cell[][] cells;
+	protected int mapType;
+	protected Cell[][] cells;
 	public Map(){
 		mapType = 7;
 		cells = new Cell[7][7];
+		for (int i = 0 ; i < 7 ; i++ ){
+			cells[0][i].setTopBorder(-1);
+			cells[mapType - 1][i].setBotBorder(-1);
+			cells[i][0].setLeftBorder(-1);
+			cells[i][mapType - 1].setRightBorder(-1);
+		}
 	}
 	public MapErrors setBorder(int coll, int row, Orientation orientation, int borderType) {
 		MapErrors mapErrors = null;
@@ -194,8 +200,8 @@ import android.annotation.SuppressLint;
 		if (cells[row][coll].getCellType() == 0){
 			if (cells[row][coll].getTopBorder().getBorderType() != 0 && 
 				cells[row - 1][coll].getBotBorder().getBorderType() != 0){
-				cells[row][coll].setTopBorder(new Border(borderType));
-				cells[row - 1][coll].setBotBorder(new Border(borderType));
+				cells[row][coll].setTopBorder(borderType);
+				cells[row - 1][coll].setBotBorder(borderType);
 				return MapErrors.none;	
 			}else return MapErrors.alreadySetted;
 		}else return MapErrors.notInUse;
@@ -204,8 +210,8 @@ import android.annotation.SuppressLint;
 		if (cells[row][coll].getCellType() == 0){
 			if (cells[row][coll].getBotBorder().getBorderType() != 0 && 
 				cells[row + 1][coll].getTopBorder().getBorderType() != 0){
-				cells[row][coll].setBotBorder(new Border(borderType));
-				cells[row + 1][coll].setTopBorder(new Border(borderType));
+				cells[row][coll].setBotBorder(borderType);
+				cells[row + 1][coll].setTopBorder(borderType);
 				return MapErrors.none;	
 			}else return MapErrors.alreadySetted;	
 		}else return MapErrors.notInUse;
@@ -214,8 +220,8 @@ import android.annotation.SuppressLint;
 		if (cells[row][coll].getCellType() == 0){	
 			if (cells[row][coll].getLeftBorder().getBorderType() != 0 && 
 				cells[row][coll - 1].getRightBorder().getBorderType() != 0){
-				cells[row][coll].setLeftBorder(new Border(borderType));
-				cells[row][coll - 1].setRightBorder(new Border(borderType));
+				cells[row][coll].setLeftBorder(borderType);
+				cells[row][coll - 1].setRightBorder(borderType);
 				return MapErrors.none;	
 			}else return MapErrors.alreadySetted;
 		}else return MapErrors.notInUse;
@@ -224,8 +230,8 @@ import android.annotation.SuppressLint;
 		if (cells[row][coll].getCellType() == 0){	
 			if (cells[row][coll].getRightBorder().getBorderType() != 0 && 
 			    cells[row][coll + 1].getLeftBorder().getBorderType() != 0){
-				cells[row][coll].setRightBorder(new Border(borderType));
-				cells[row][coll + 1].setLeftBorder(new Border(borderType));
+				cells[row][coll].setRightBorder(borderType);
+				cells[row][coll + 1].setLeftBorder(borderType);
 				return MapErrors.none;	
 			}else return MapErrors.alreadySetted;
 		}else return MapErrors.notInUse;
