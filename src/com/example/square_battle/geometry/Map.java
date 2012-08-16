@@ -5,6 +5,22 @@ import android.annotation.SuppressLint;
 @SuppressLint({ "ParserError", "ParserError", "ParserError", "ParserError" }) public class Map {
 	protected int mapType;
 	protected Cell[][] cells;
+	public int getMapType(){
+		return mapType;
+	}
+	public Cell[][] getCells(){
+		Cell[][] tmp = new Cell[mapType][mapType];
+		for (int i = 0; i < mapType ; i++){
+			for (int j = 0; j < mapType ; j++){
+				tmp[i][j].setCellType(cells[i][j].getCellType());
+				tmp[i][j].setBotBorder(cells[i][j].getBotBorder().getBorderType());
+				tmp[i][j].setTopBorder(cells[i][j].getTopBorder().getBorderType());
+				tmp[i][j].setLeftBorder(cells[i][j].getLeftBorder().getBorderType());
+				tmp[i][j].setRightBorder(cells[i][j].getRightBorder().getBorderType());
+			}
+		}
+		return tmp;
+	}
 	public Map(){
 		mapType = 7;
 		cells = new Cell[7][7];

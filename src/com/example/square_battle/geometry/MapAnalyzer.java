@@ -6,8 +6,29 @@ public class MapAnalyzer extends Map{
 	public void MapAnalyzar(){
 	}
 	private ArrayList findedPosibleWays;
-	private ArrayList findedWay;
-	private void analyzeWays(int borderType){
+	private ArrayList<Cell> findedWay;
+	public boolean updateWays(int borderType){
+		analyzeWays();
+		Cell currentCell;
+		int count = findedWay.size();
+		if (count != 0){
+			for (int i = 0; i <count ; i ++){
+				currentCell = findedWay.get(i);
+				currentCell.setCellType(borderType);
+				if (currentCell.getBotBorder().getBorderType() != 0)
+					currentCell.setBotBorder(borderType);
+				if (currentCell.getLeftBorder().getBorderType() != 0)
+					currentCell.setLeftBorder(borderType);
+				if (currentCell.getRightBorder().getBorderType() != 0)
+					currentCell.setRightBorder(borderType);
+				if (currentCell.getTopBorder().getBorderType() != 0)
+					currentCell.setTopBorder(borderType);
+			}
+		}
+		findedWay.clear();
+		return true;
+	}
+	private void analyzeWays(){
 		Cell currentCell;
 		int i,j;
 		for(int iter = 0; iter < findedPosibleWays.size(); iter+=3){
@@ -32,10 +53,27 @@ public class MapAnalyzer extends Map{
 			checkOpositOrientation(cellOrientation,i,j);
 		}
 		while(true){
+			orientedList.clear();
+			currentCell = cells[i][j];
 			orientedList = currentCell.getCellOrientation();
-			
+			if (orientedList.size() == 2){
+				if ((Orientation)orientedList.get(0) == cellOrientation){
+					findedWay.add(currentCell);
+					cellOrientation = (Orientation)orientedList.get(1);
+					checkOpositOrientation(cellOrientation,i,j);
+				}else{
+					findedWay.add(currentCell);
+					cellOrientation = (Orientation)orientedList.get(0);
+					checkOpositOrientation(cellOrientation,i,j);
+				}
+			}else if (orientedList.size() == 1){
+				if ((Orientation)orientedList.get(0) == cellOrientation){
+					findedWay.add(currentCell);
+					orientedList.clear();
+					return true;
+				}else return false;
+			}
 		}
-		return false;
 	}
 	private boolean checkOpositOrientation(Orientation cellOrientation, int i, int j){
 		if (cellOrientation == Orientation.bot){
