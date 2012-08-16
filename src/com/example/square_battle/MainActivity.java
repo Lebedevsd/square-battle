@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.support.v4.app.NavUtils;
 
 public class MainActivity extends Activity {
